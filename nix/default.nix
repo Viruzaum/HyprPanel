@@ -5,7 +5,7 @@
   stdenv,
   lib,
   writeShellScriptBin,
-  bun,
+  # bun,
   dart-sass,
   fd,
   accountsservice,
@@ -29,6 +29,14 @@
     extraPackages = [accountsservice];
   };
 
+  bunBaseline = pkgs.bun.overrideAttrs rec {
+    passthru.sources."x86_64-linux" = pkgs.fetchurl {
+      url = "https://github.com/oven-sh/bun/releases/download/bun-v1.1.27/bun-linux-x64-baseline.zip";
+      hash = "sha256-FwkVP5lb2V9E8YGPkTAqVMsZmaZXMq8x5AR+99cuIX0=";
+    };
+    src = passthru.sources."x86_64-linux";
+  };
+
   pname = "hyprpanel";
   config = stdenv.mkDerivation {
     inherit pname;
@@ -36,7 +44,7 @@
     src = ../.;
 
     buildPhase = ''
-      ${bun}/bin/bun build ./main.ts \
+      ${bunBaseline}/bin/bun build ./main.ts \
         --outfile main.js \
         --external "resource://*" \
         --external "gi://*"
@@ -61,4 +69,3 @@ in {
     '';
   };
 }
-
