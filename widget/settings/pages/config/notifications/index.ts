@@ -40,10 +40,25 @@ export const NotificationSettings = (): Scrollable<Child, Attribute> => {
                     type: 'number',
                 }),
                 Option({
+                    opt: options.notifications.showActionsOnHover,
+                    title: 'Show Actions only on Hover',
+                    subtitle: 'Show the action buttons only when hovering over a notification',
+                    type: 'boolean',
+                }),
+                Option({
                     opt: options.notifications.active_monitor,
                     title: 'Follow Cursor',
                     subtitle: 'The notification will follow the monitor of your cursor',
                     type: 'boolean',
+                }),
+                Option({
+                    opt: options.notifications.clearDelay,
+                    title: 'Clear Delay',
+                    subtitle:
+                        'The delay in milliseconds before a notification is cleared' +
+                        '\nWARNING: Setting this value too low may crash AGS depending on your system.',
+                    type: 'number',
+                    increment: 20,
                 }),
                 Option({
                     opt: options.notifications.timeout,

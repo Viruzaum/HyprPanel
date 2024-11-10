@@ -1,14 +1,14 @@
 {
     "name": "hyprpanel",
     "version": "1.0.0",
-    "description": "A customizble panel built for Hyprland.",
+    "description": "A customizable panel built for Hyprland.",
     "main": "config.js",
     "directories": {
         "lib": "lib"
     },
     "scripts": {
         "lint": "eslint --config .eslintrc.js .",
-        "lint:fix": "eslint --config .eslintrc.js .",
+        "lint:fix": "eslint --config .eslintrc.js . --fix",
         "format": "prettier --write 'modules/**/*.ts'"
     },
     "keywords": [],

@@ -1,5 +1,9 @@
+const notifs = await Service.import('notifications');
 import icons from 'modules/icons/index';
+import options from 'options';
 import { Notification } from 'types/service/notifications';
+
+const { clearDelay } = options.notifications;
 
 export const removingNotifications = Variable<boolean>(false);
 
@@ -25,13 +29,18 @@ export const getNotificationIcon = (app_name: string, app_icon: string, app_entr
     return icon;
 };
 
-export const closeNotifications = async (notifications: Notification[]): Promise<void> => {
+export const clearNotifications = async (notifications: Notification[], delay: number): Promise<void> => {
     removingNotifications.value = true;
     for (const notif of notifications) {
         notif.close();
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, delay));
     }
     removingNotifications.value = false;
 };
 
+const clearAllNotifications = async (): Promise<void> => {
+    clearNotifications(notifs.notifications, clearDelay.value);
+};
+
 globalThis['removingNotifications'] = removingNotifications;
+globalThis['clearAllNotifications'] = clearAllNotifications;

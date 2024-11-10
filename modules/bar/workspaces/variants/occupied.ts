@@ -2,14 +2,14 @@ const hyprland = await Service.import('hyprland');
 import options from 'options';
 import { getWorkspaceRules, getWorkspacesForMonitor, isWorkspaceIgnored } from '../helpers';
 import { Monitor, Workspace } from 'types/service/hyprland';
-import { getWsColor, renderClassnames, renderLabel } from '../utils';
+import { getAppIcon, getWsColor, renderClassnames, renderLabel } from '../utils';
 import { range } from 'lib/utils';
 import { BoxWidget } from 'lib/types/widget';
 import { WorkspaceIconMap } from 'lib/types/workspace';
-
 const { workspaces, monitorSpecific, workspaceMask, spacing, ignored, showAllActive } = options.bar.workspaces;
 
 export const occupiedWses = (monitor: number): BoxWidget => {
+    const workspaceRules = getWorkspaceRules();
     return Widget.Box({
         children: Utils.merge(
             [
@@ -24,9 +24,13 @@ export const occupiedWses = (monitor: number): BoxWidget => {
                 options.bar.workspaces.show_numbered.bind('value'),
                 options.bar.workspaces.numbered_active_indicator.bind('value'),
                 spacing.bind('value'),
-                hyprland.active.workspace.bind('id'),
                 options.bar.workspaces.workspaceIconMap.bind('value'),
                 options.bar.workspaces.showWsIcons.bind('value'),
+                options.bar.workspaces.showApplicationIcons.bind('value'),
+                options.bar.workspaces.applicationIconOncePerWorkspace.bind('value'),
+                options.bar.workspaces.applicationIconMap.bind('value'),
+                options.bar.workspaces.applicationIconEmptyWorkspace.bind('value'),
+                options.bar.workspaces.applicationIconFallback.bind('value'),
                 options.theme.matugen.bind('value'),
                 options.theme.bar.buttons.workspaces.smartHighlight.bind('value'),
                 hyprland.bind('monitors'),
@@ -45,17 +49,20 @@ export const occupiedWses = (monitor: number): BoxWidget => {
                 showNumbered: boolean,
                 numberedActiveIndicator: string,
                 spacing: number,
-                activeId: number,
                 wsIconMap: WorkspaceIconMap,
                 showWsIcons: boolean,
+                showAppIcons,
+                applicationIconOncePerWorkspace,
+                applicationIconMap,
+                applicationIconEmptyWorkspace,
+                applicationIconFallback,
                 matugen: boolean,
                 smartHighlight: boolean,
                 monitors: Monitor[],
             ) => {
+                const activeId = hyprland.active.workspace.id;
                 let allWkspcs = range(totalWkspcs || 8);
-
                 const activeWorkspaces = wkSpaces.map((w) => w.id);
-                const workspaceRules = getWorkspaceRules();
 
                 // Sometimes hyprland doesn't have all the monitors in the list
                 // so we complement it with monitors from the workspace list
@@ -69,7 +76,7 @@ export const occupiedWses = (monitor: number): BoxWidget => {
 
                 const workspacesWithRules = Object.keys(workspaceRules).reduce((acc: number[], k: string) => {
                     return [...acc, ...workspaceRules[k]];
-                }, [] as number[]);
+                }, []);
 
                 const activesForMonitor = activeWorkspaces.filter((w) => {
                     if (
@@ -91,14 +98,23 @@ export const occupiedWses = (monitor: number): BoxWidget => {
                     allWkspcs = [...new Set([...allWkspcs, ...activeWorkspaces])];
                 }
 
-                return allWkspcs
-                    .filter((workspaceNumber) => {
-                        return !isWorkspaceIgnored(ignored, workspaceNumber);
-                    })
+                const returnWs = allWkspcs
                     .sort((a, b) => {
                         return a - b;
                     })
                     .map((i, index) => {
+                        if (isWorkspaceIgnored(ignored, i)) {
+                            return Widget.Box();
+                        }
+
+                        const appIcons = showAppIcons
+                            ? getAppIcon(i, applicationIconOncePerWorkspace, {
+                                  iconMap: applicationIconMap,
+                                  defaultIcon: applicationIconFallback,
+                                  emptyIcon: applicationIconEmptyWorkspace,
+                              })
+                            : '';
+
                         return Widget.Button({
                             class_name: 'workspace-button',
                             on_primary_click: () => {
@@ -125,6 +141,8 @@ export const occupiedWses = (monitor: number): BoxWidget => {
                                     available,
                                     active,
                                     occupied,
+                                    showAppIcons,
+                                    appIcons,
                                     workspaceMask,
                                     showWsIcons,
                                     wsIconMap,
@@ -140,6 +158,7 @@ export const occupiedWses = (monitor: number): BoxWidget => {
                             }),
                         });
                     });
+                return returnWs;
             },
         ),
     });

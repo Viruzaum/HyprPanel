@@ -14,7 +14,10 @@
 
 A panel built for Hyprland with [AGS](https://github.com/Aylur/ags)
 
-![HyprPanel](./assets/HyprPanel.png)
+![HyprPanel1](./assets/hp1.png)
+![HyprPanel2](./assets/hp2.png)
+
+> NOTE: If you would like to support the project, please instead [donate to Aylur](https://ko-fi.com/aylur) who put in tremendous effort to build AGS. Hyprpanel likely wouldn't exist without it.
 
 ## Installation
 
@@ -29,27 +32,37 @@ curl -fsSL https://bun.sh/install | bash && \
   sudo ln -s $HOME/.bun/bin/bun /usr/local/bin/bun
 ```
 
-Additional dependencies:
+### Required
 
 ```sh
 pipewire
+
+## Resource monitoring modules
 libgtop
+
+## Bluetooth menu utilities
 bluez
 bluez-utils
-grimblast
-gpu-screen-recorder
-hyprpicker
-btop
-networkmanager
-matugen
+
+## Copy/Paste utilities
 wl-clipboard
-swww
+
+## Compiler for sass/scss
 dart-sass
+
+## Brightness module for OSD
 brightnessctl
+
+## AGS requirements
+networkmanager
 gnome-bluetooth-3.0
 ```
 
-Optional Dependencies:
+::: warning
+HyprPanel will not run without the required dependencies.
+:::
+
+### Optional
 
 ```sh
 ## Used for Tracking GPU Usage in your Dashboard (NVidia only)
@@ -62,15 +75,34 @@ pywal
 ## To check for pacman updates in the default script used in the updates module
 pacman-contrib
 
-## To switch between power profiles in battery module
+## To switch between power profiles in the battery module
 power-profiles-daemon
+
+## To take snapshots with the default snapshot shortcut in the dashboard
+grimblast
+
+## To record screen through the dashboard record shortcut
+gpu-screen-recorder
+
+## To enable the eyedropper color picker with the default snapshot shortcut in the dashboard
+hyprpicker
+
+## To click resource/stat bars in the dashboard and open btop
+btop
+
+## To enable matugen based color theming
+matugen
+
+## To enable matugen based color theming and setting wallpapers
+swww
 ```
 
 ### Arch
 
 pacman:
+
 ```bash
-sudo pacman -S pipewire libgtop bluez bluez-utils btop networkmanager dart-sass wl-clipboard brightnessctl swww python gnome-bluetooth-3.0 pacman-contrib power-profiles-daemon
+sudo pacman -S pipewire libgtop bluez bluez-utils btop networkmanager dart-sass wl-clipboard brightnessctl swww python gnome-bluetooth-3.0 pacman-contrib power-profiles-daemon gvfs
 ```
 
 AUR:
@@ -82,6 +114,7 @@ yay -S grimblast-git gpu-screen-recorder hyprpicker matugen-bin python-gpustat a
 ### Fedora
 
 COPR - Add [solopasha/hyprland](https://copr.fedorainfracloud.org/coprs/solopasha/hyprland/) for most hyprland-related dependencies, and [hues-sueh/packages](https://copr.fedorainfracloud.org/coprs/heus-sueh/packages/) for matugen. Both provide the `swww` package, so prioritise the former repo:
+
 ```bash
 sudo dnf copr enable solopasha/hyprland
 sudo dnf copr enable heus-sueh/packages
@@ -89,16 +122,19 @@ sudo dnf config-manager --save --setopt=copr:copr.fedorainfracloud.org:heus-sueh
 ```
 
 DNF:
+
 ```bash
 sudo dnf install pipewire libgtop2 bluez bluez-tools grimblast hyprpicker btop NetworkManager  wl-clipboard swww brightnessctl gnome-bluetooth aylurs-gtk-shell power-profiles-daemon gvfs
 ```
 
 bun:
+
 ```bash
 bun install -g sass
 ```
 
 flatpak:
+
 ```bash
 flatpak install flathub --system com.dec05eba.gpu_screen_recorder
 ```
@@ -106,6 +142,7 @@ flatpak install flathub --system com.dec05eba.gpu_screen_recorder
 #### Optional Dependencies
 
 pip:
+
 ```bash
 sudo dnf install python python3-pip; pip install gpustat pywal
 ```

@@ -22,6 +22,7 @@ export type LabelHook = (self: Label<Gtk.Widget>) => void;
 export type Module = {
     icon?: string | Binding<string>;
     textIcon?: string | Binding<string>;
+    useTextIcon?: Binding<boolean>;
     label?: string | Binding<string>;
     labelHook?: LabelHook;
     boundLabel?: string;
@@ -36,12 +37,5 @@ export type Module = {
 
 export type ResourceLabelType = 'used/total' | 'used' | 'percentage' | 'free';
 
-export type StorageIcon = '󰋊' | '' | '󱛟' | '' | '' | '';
-
-export type NetstatIcon = '󰖟' | '󰇚' | '󰕒' | '󰛳' | '' | '󰣺' | '󰖩' | '' | '󰈀';
 export type NetstatLabelType = 'full' | 'in' | 'out';
 export type RateUnit = 'GiB' | 'MiB' | 'KiB' | 'auto';
-
-export type UpdatesIcon = '󰚰' | '󰇚' | '' | '󱑢' | '󱑣' | '󰏖' | '' | '󰏔' | '󰏗';
-
-export type PowerIcon = '' | '' | '󰍃' | '󰿅' | '󰒲' | '󰤄';

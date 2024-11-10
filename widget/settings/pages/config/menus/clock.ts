@@ -14,6 +14,7 @@ export const ClockMenuSettings = (): Scrollable<Child, Attribute> => {
             children: [
                 Header('Time'),
                 Option({ opt: options.menus.clock.time.military, title: 'Use 24hr time', type: 'boolean' }),
+                Option({ opt: options.menus.clock.time.hideSeconds, title: 'Hide seconds', type: 'boolean' }),
 
                 Header('Weather'),
                 Option({ opt: options.menus.clock.weather.enabled, title: 'Enabled', type: 'boolean' }),
@@ -26,7 +27,7 @@ export const ClockMenuSettings = (): Scrollable<Child, Attribute> => {
                 Option({
                     opt: options.menus.clock.weather.key,
                     title: 'Weather API Key',
-                    subtitle: 'May require AGS restart. https://weatherapi.com/',
+                    subtitle: "API Key or path to a JSON file that contains a 'weather_api_key' variable.",
                     type: 'string',
                 }),
                 Option({
