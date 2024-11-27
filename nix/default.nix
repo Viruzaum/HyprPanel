@@ -5,7 +5,7 @@
   stdenv,
   lib,
   writeShellScriptBin,
-  bun,
+  # bun,
   dart-sass,
   fd,
   accountsservice,
@@ -26,6 +26,14 @@
 }: let
   ags = inputs.ags.packages.${system}.default.override {
     extraPackages = [accountsservice];
+  };
+
+  bun = pkgs.bun.overrideAttrs rec {
+    passthru.sources."x86_64-linux" = pkgs.fetchurl {
+      url = "https://github.com/oven-sh/bun/releases/download/bun-v1.1.37/bun-linux-x64-baseline.zip";
+      hash = "sha256-AHmpv7jqLBW1C5G0sfzG+ppctluxR8xscZxlCnVyINw=";
+    };
+    src = passthru.sources."x86_64-linux";
   };
 
   pname = "hyprpanel";
